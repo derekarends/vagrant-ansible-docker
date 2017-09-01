@@ -1,0 +1,8 @@
+---
+- name: Compose nginx
+  command: docker stack deploy -c /vagrant/playbooks/nginx/nginx-compose.yml thinkovator
+  when: swarm_leader is defined
+  tags: [compose]
+
+
+  //need to create swarm swarm_leader for nginx

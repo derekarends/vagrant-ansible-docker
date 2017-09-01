@@ -1,0 +1,5 @@
+---
+- name: Create swarm worker
+  command: docker swarm join --advertise-addr {{ ip }} --listen-addr {{ ip }}:2377 --token {{ hostvars['manager-1']['swarm_token']['stdout'] }} {{ swarm_leader_id }}:2377
+  ignore_errors: True
+  tags: [swarm_worker]

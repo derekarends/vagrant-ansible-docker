@@ -1,0 +1,16 @@
+---
+# - name: Check if already swarm leader
+#   shell: docker node ls > /dev/null 2>&1
+#   register: output
+
+- name: Init swarm leader
+  command: docker swarm init --advertise-addr {{ ip }}
+  ignore_errors: True
+  when: swarm_leader is defined
+  tags: [swarm_manager]
+
+- name: Create swarm token
+  command: docker swarm join-token -q worker
+  register: swarm_token
+  when: swarm_leader is defined
+  tags: [swarm_manager]

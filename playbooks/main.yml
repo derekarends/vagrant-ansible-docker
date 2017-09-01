@@ -1,0 +1,17 @@
+- hosts: manager
+  serial: 1
+  become: vagrant
+  roles:
+    - swarm_manager
+
+- hosts: worker
+  serial: 1
+  become: vagrant
+  roles:
+    - swarm_worker
+
+- hosts: manager
+  serial: 1
+  become: vagrant
+  roles:
+    - compose

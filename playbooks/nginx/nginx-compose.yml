@@ -1,0 +1,14 @@
+version: "3"
+services:
+  nginx:
+    image: nginx
+    deploy:
+      replicas: 2
+    ports:
+      - "80:80"
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+    networks:
+      - webnet
+networks:
+  webnet:

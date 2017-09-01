@@ -1,0 +1,5 @@
+---
+- name: Compose docker stack
+  command: docker stack deploy -c /vagrant/playbooks/compose/docker-compose.yml thinkovator
+  when: swarm_leader is defined
+  tags: [compose]
