@@ -1,3 +1,11 @@
+- hosts: nginx
+  serial: 1
+  become: vagrant
+  roles:
+    - swarm_manager
+    - swarm_worker
+    - nginx
+
 - hosts: manager
   serial: 1
   become: vagrant

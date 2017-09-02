@@ -1,0 +1,6 @@
+directories:
+  - /etc/nginx/conf.d
+
+nginx_conf: [
+  { src: '../files/nginx.conf', dest: '/etc/nginx/conf.d/nginx.conf' }
+]

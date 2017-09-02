@@ -6,7 +6,7 @@ numcpu = 1
 
 num_of_nginx = 1
 num_of_managers = 1
-num_of_workers = 2
+num_of_workers = 1
 
 nginx_instances = []
 manager_instances = []
@@ -27,12 +27,12 @@ end
 
 
 File.open("./hosts", 'w') { |file| 
-  nginx_instances.each do |i|
-    file.write("#{i[:ip]} #{i[:name]} #{i[:name]}\n")
-  end
-  manager_instances.each do |i|
-    file.write("#{i[:ip]} #{i[:name]} #{i[:name]}\n")
-  end
+  # nginx_instances.each do |i|
+  #   file.write("#{i[:ip]} #{i[:name]} #{i[:name]}\n")
+  # end
+  # manager_instances.each do |i|
+  #   file.write("#{i[:ip]} #{i[:name]} #{i[:name]}\n")
+  # end
   worker_instances.each do |i|
     file.write("#{i[:ip]} #{i[:name]} #{i[:name]}\n")
   end
@@ -63,7 +63,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       File.open("./playbooks/host_vars/nginx-#{nginx[:id]}", 'w') { |file| 
         file.write("ip: #{nginx[:ip]}\n")
+        if(nginx[:id] == 1)
+          file.write("swarm_leader: true")
+        else 
+          file.write("swarm_leader_ip: #{nginx_instances[0][:ip]}")
+        end
       }
+
+      # if File.file?("./etc/nginx/conf.d") 
+      #   i.vm.provision "file", source: "./playbooks/nginx/files/conf.d", destination: "/etc/nginx"
+      # end 
     end
   end
     
@@ -114,7 +123,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           ansible.groups = {
             "nginx"   => ["nginx-1"],
             "manager" => ["manager-1"],
-            "worker"  => ["worker-[1:2]"],
+            "worker"  => ["worker-1"],
           }
         end
       end

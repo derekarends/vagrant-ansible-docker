@@ -1,4 +1,1 @@
-192.168.10.2 nginx-1 nginx-1
-192.168.10.3 manager-1 manager-1
 192.168.10.4 worker-1 worker-1
-192.168.10.5 worker-2 worker-2

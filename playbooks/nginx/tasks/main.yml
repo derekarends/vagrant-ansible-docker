@@ -1,8 +1,21 @@
 ---
+- name: Directories are present
+  become: true
+  file:
+    dest: "{{ item }}"
+    state: directory
+  with_items: '{{ directories }}'
+  tags: [nginx]
+
+- name: Config is present
+  become: true
+  copy:
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+  with_items: '{{ nginx_conf }}'
+  tags: [nginx]
+
 - name: Compose nginx
   command: docker stack deploy -c /vagrant/playbooks/nginx/nginx-compose.yml thinkovator
   when: swarm_leader is defined
-  tags: [compose]
-
-
-  //need to create swarm swarm_leader for nginx
+  tags: [nginx]

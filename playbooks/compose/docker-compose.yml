@@ -10,8 +10,6 @@ services:
           memory: 50M
     depends_on:
       - redis
-    environment:
-      - VIRTUAL_HOST=localhost
     networks:
       - webnet
   visualizer:
