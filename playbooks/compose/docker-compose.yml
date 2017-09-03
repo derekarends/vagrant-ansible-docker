@@ -11,7 +11,7 @@ services:
     depends_on:
       - redis
     networks:
-      - webnet
+      - backend
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
@@ -22,10 +22,23 @@ services:
       placement:
         constraints: [node.role == manager]
     networks:
-      - webnet
+      - backend
   redis:
     image: redis
     networks:
-      - webnet
+      - backend
+  nginx:
+    image: nginx
+    deploy:
+      replicas: 2
+      placement:
+        constraints: [node.role == manager]
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ../nginx/files/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - backend
 networks:
-  webnet:
+  backend:

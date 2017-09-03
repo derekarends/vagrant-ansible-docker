@@ -1,6 +1,10 @@
 directories:
   - /etc/nginx/conf.d
+  - /etc/nginx/includes
+  - /var/log/nginx
+  - /etc/nginx/upstreams
+  - /etc/nginx/servers
 
 nginx_conf: [
-  { src: '../files/nginx.conf', dest: '/etc/nginx/conf.d/nginx.conf' }
+  { src: '../files/nginx.conf', dest: '/etc/nginx/nginx.conf' }
 ]

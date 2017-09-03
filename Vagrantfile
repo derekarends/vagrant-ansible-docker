@@ -30,9 +30,9 @@ File.open("./hosts", 'w') { |file|
   # nginx_instances.each do |i|
   #   file.write("#{i[:ip]} #{i[:name]} #{i[:name]}\n")
   # end
-  # manager_instances.each do |i|
-  #   file.write("#{i[:ip]} #{i[:name]} #{i[:name]}\n")
-  # end
+  manager_instances.each do |i|
+    file.write("#{i[:ip]} #{i[:name]} #{i[:name]}\n")
+  end
   worker_instances.each do |i|
     file.write("#{i[:ip]} #{i[:name]} #{i[:name]}\n")
   end
@@ -50,31 +50,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :docker
 
-  nginx_instances.each do |nginx|
-    config.vm.define nginx[:name] do |i|
-      i.vm.hostname = nginx[:name]
-      i.vm.network "private_network", ip: "#{nginx[:ip]}"
-      i.vm.provision "shell", path: "./provision.sh"
+  # nginx_instances.each do |nginx|
+  #   config.vm.define nginx[:name] do |i|
+  #     i.vm.hostname = nginx[:name]
+  #     i.vm.network "private_network", ip: "#{nginx[:ip]}"
+  #     i.vm.provision "shell", path: "./provision.sh"
 
-      if File.file?("./hosts") 
-        i.vm.provision "file", source: "hosts", destination: "/tmp/hosts"
-        i.vm.provision "shell", inline: "cat /tmp/hosts >> /etc/hosts", privileged: true
-      end 
+  #     if File.file?("./hosts") 
+  #       i.vm.provision "file", source: "hosts", destination: "/tmp/hosts"
+  #       i.vm.provision "shell", inline: "cat /tmp/hosts >> /etc/hosts", privileged: true
+  #     end 
 
-      File.open("./playbooks/host_vars/nginx-#{nginx[:id]}", 'w') { |file| 
-        file.write("ip: #{nginx[:ip]}\n")
-        if(nginx[:id] == 1)
-          file.write("swarm_leader: true")
-        else 
-          file.write("swarm_leader_ip: #{nginx_instances[0][:ip]}")
-        end
-      }
-
-      # if File.file?("./etc/nginx/conf.d") 
-      #   i.vm.provision "file", source: "./playbooks/nginx/files/conf.d", destination: "/etc/nginx"
-      # end 
-    end
-  end
+  #     File.open("./playbooks/host_vars/nginx-#{nginx[:id]}", 'w') { |file| 
+  #       file.write("ip: #{nginx[:ip]}\n")
+  #       if(nginx[:id] == 1)
+  #         file.write("swarm_leader: true")
+  #       else 
+  #         file.write("swarm_leader_ip: #{nginx_instances[0][:ip]}")
+  #       end
+  #     }
+  #   end
+  # end
     
   manager_instances.each do |manager|
     config.vm.define manager[:name] do |i|
@@ -121,7 +117,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             swarm_iface: "eth1"
           }
           ansible.groups = {
-            "nginx"   => ["nginx-1"],
+            # "nginx"   => ["nginx-1"],
             "manager" => ["manager-1"],
             "worker"  => ["worker-1"],
           }
